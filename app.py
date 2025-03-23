@@ -23,12 +23,18 @@ def get_latest_message():
             message_id = latest_message["id"]
             sender_id = None
 
-            # Error Handling: যদি 'from' কী না থাকে
+            # Check if 'from' exists, otherwise handle it gracefully
             if 'from' in latest_message:
                 sender_id = latest_message["from"]["id"]
             else:
                 print("Error: 'from' field not found in message!")
-                return None, None
+                # Optional: Check message type, or just skip non-user messages
+                if 'message' in latest_message:
+                    print("Message Type:", latest_message['message'])
+                    # Ignore system messages or other types
+                    return None, None
+                else:
+                    return None, None
             
             # 🔹 নতুন মেসেজ চেক করে
             if LAST_MESSAGE_ID != message_id:  
